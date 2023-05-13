@@ -42,6 +42,7 @@ jobs:
     - name: Build to Exe
       run: |
         pip install pyinstaller
+        dir
         pyinstaller --noconsole --add-data info.md;. --add-data extra/windows-build/default.yaml;ultralytics\yolo\cfg\. --add-data src/state_recognition/model_saves/segmentation18.pth;src/state_recognition/model_saves/. --add-data src/state_recognition/model_saves/yolo8n_608_1200.pt;src/state_recognition/model_saves\. run.py
         
     - name: Upload Artifacts
