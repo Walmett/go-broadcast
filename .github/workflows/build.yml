@@ -27,6 +27,10 @@ jobs:
         dir
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+        cd venv
+        cd Lib
+        cd site-packages
+        dir
     
     - name: Fix torch for pyinstaller
       run: |
