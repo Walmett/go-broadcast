@@ -27,3 +27,17 @@ jobs:
     - name: Fix torch for pyinstaller
       run: |
         dir
+        cd ..
+        dir
+        cd ..
+        dir
+        cd ..
+        dir
+        
+    - name: UploadArtifacts
+      uses: actions/upload-artifact@v2
+      with:
+          name: Distributive
+          path: |
+              task5/bin/
+              task5/lib/
