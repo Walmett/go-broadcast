@@ -1,4 +1,4 @@
-name: Windows build
+name: Windows Build
 
 on:
   push:
@@ -20,31 +20,40 @@ jobs:
         python-version: '3.10'
         cache: 'pip'
 
-    - name: Install dependencies in venv
+    - name: Install Dependencies in venv
       run: |
         python -m venv venv
         . venv/Scripts/activate
-        dir
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+        cd venv/Lib/site-packages
+    
+    - name: Fix Torch for Build
+      run: |
         rm venv/Lib/site-packages/torch/jit/_script.py
         copy extra/windows-build/_script.py venv/Lib/site-packages/torch/jit/_script.py
-        cd venv/Lib/site-packages
-        dir
-    
-    - name: Fix torch for pyinstaller
-      run: |
-        dir
-        cd ..
-        dir
-        cd ..
-        dir
-        cd ..
-        dir
         
-    - name: UploadArtifacts
+    - name: Download Weights for Neural Networks
+      run: |
+        pip install gdown
+        gdown "https://drive.google.com/uc?export=download&id=1LyMUY7dfIr-Uf3Elw-0tgwtF3fehqCDb" \
+          -O src/state_recognition/model_saves/yolo8n_608_1200.pt
+        gdown "https://drive.google.com/uc?export=download&id=1_bQJXK3Qaxg6yO9NR6VgIHT2AlgPaoBS" \
+          -O src/state_recognition/model_saves/segmentation18.pth
+        
+    - name: Build to Exe
+      run: |
+        pip install pyinstaller
+        pyinstaller --noconsole \
+          --add-data info.md;. \
+          --add-data extra/windows-build/default.yaml;ultralytics\yolo\cfg\. \
+          --add-data src/state_recognition/model_saves/segmentation18.pth;src/state_recognition/model_saves/. \
+          --add-data src/state_recognition/model_saves/yolo8n_608_1200.pt;src/state_recognition/model_saves\. \
+          run.py
+        
+    - name: Upload Artifacts
       uses: actions/upload-artifact@v3
       with:
-          name: Distributive
+          name: windows-exe
           path: |
-              ./
+              dist/run/
