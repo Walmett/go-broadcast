@@ -36,10 +36,10 @@ jobs:
     - name: Download Weights for Neural Networks
       run: |
         pip install gdown
-        gdown "https://drive.google.com/uc?export=download&id=1LyMUY7dfIr-Uf3Elw-0tgwtF3fehqCDb" \
-          -O src/state_recognition/model_saves/yolo8n_608_1200.pt
-        gdown "https://drive.google.com/uc?export=download&id=1_bQJXK3Qaxg6yO9NR6VgIHT2AlgPaoBS" \
-          -O src/state_recognition/model_saves/segmentation18.pth
+        gdown "https://drive.google.com/uc?export=download&id=1LyMUY7dfIr-Uf3Elw-0tgwtF3fehqCDb" -O \
+          src/state_recognition/model_saves/yolo8n_608_1200.pt
+        gdown "https://drive.google.com/uc?export=download&id=1_bQJXK3Qaxg6yO9NR6VgIHT2AlgPaoBS" -O \ 
+          src/state_recognition/model_saves/segmentation18.pth
         
     - name: Build to Exe
       run: |
